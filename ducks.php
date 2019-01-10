@@ -33,6 +33,16 @@ abstract class Duck
     {
         echo "Я плыву\n";
     }
+
+    public function setFlyBehavior(FlyBehavior $fb)
+    {
+        $this->flyBehavior = $fb;
+    }
+
+    public function setQuackBehavior(QuackBehavior $qb)
+    {
+        $this->quackBehavior = $qb;
+    }
 }
 
 class FlyWithWings implements FlyBehavior
@@ -96,11 +106,40 @@ class MiniDuckSimulator
 {
     public static function main() : void
     {
-        $mallard = new MallardDuck();
+        /*$mallard = new MallardDuck();
         $mallard->performQuack();
         $mallard->performFly();
-        $mallard->display();
+        $mallard->display();*/
+
+        $model = new ModelDuck();
+        $model->performFly();
+        $model->setFlyBehavior(new FlyRocketPowered());
+        $model->performFly();
     }
 }
+
+
+class ModelDuck extends Duck
+{
+    public function __construct()
+    {
+        $this->flyBehavior = new FlyNoWay();
+        $this->quackBehavior = new SimpleQuack();
+    }
+
+    public function display()
+    {
+        echo "Это модель утки";
+    }
+}
+
+class FlyRocketPowered implements FlyBehavior
+{
+    public function fly()
+    {
+        echo "Утка, летающая с помощью ракеты\n";
+    }
+}
+
 
 MiniDuckSimulator::main();
